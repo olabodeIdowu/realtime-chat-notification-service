@@ -1,7 +1,7 @@
 {
-  "name": "fintech-wallet-app-server",
+  "name": "realtime-chat-notification-service",
   "version": "1.0.0",
-  "description": "fintech wallet app",
+  "description": "Realtime Chat Notification Service",
   "main": "index.js",
   "scripts": {
     "start": "node server.js",
