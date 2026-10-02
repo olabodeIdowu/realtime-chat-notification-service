@@ -1,7 +1,7 @@
 import { Server, Socket } from "socket.io";
 import { setUserOnline, setUserOffline, refreshPresence } from "./presence";
-import { MessageService } from "../services/message.service";
 import { producer } from "../config/kafka";
+import { MessageService } from "../services/message.service";
 
 const messageService = new MessageService();
 
