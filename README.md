@@ -14,6 +14,7 @@
 This service provides a scalable real-time chat and notification system built for high concurrency.
 
 **Key capabilities:**
+
 - WebSocket connections via Socket.io
 - Horizontal scaling with Redis Adapter
 - Presence system (online / offline / last seen)
@@ -25,45 +26,45 @@ This service provides a scalable real-time chat and notification system built fo
 ## Architecture
 
 Clients (Web / Mobile)
-        │  WebSocket
-        ▼
+│ WebSocket
+▼
 ┌────────────────────────────────────────┐
-│         Socket.io Servers              │  (multiple instances)
-│  - Connection handling                 │
-│  - Rooms & Namespaces                  │
-│  - Presence                            │
+│ Socket.io Servers │ (multiple instances)
+│ - Connection handling │
+│ - Rooms & Namespaces │
+│ - Presence │
 └──────────────┬─────────────────────────┘
-               │ Redis Adapter (pub/sub)
-               ▼
+│ Redis Adapter (pub/sub)
+▼
 ┌────────────────────────────────────────┐
-│              Redis                     │
-│  - Adapter for multi-node Socket.io    │
-│  - Presence store                      │
-│  - Optional message cache              │
+│ Redis │
+│ - Adapter for multi-node Socket.io │
+│ - Presence store │
+│ - Optional message cache │
 └──────────────┬─────────────────────────┘
-               │
-               ▼
+│
+▼
 ┌────────────────────────────────────────┐
-│         Kafka (optional)               │
-│  - Chat events                         │
-│  - Notification events                 │
+│ Kafka (optional) │
+│ - Chat events │
+│ - Notification events │
 └────────────────────────────────────────┘
-               │
-               ▼
+│
+▼
 ┌────────────────────────────────────────┐
-│         MySQL / MongoDB                │
-│  - Persistent message history          │
+│ MySQL / MongoDB │
+│ - Persistent message history │
 └────────────────────────────────────────┘
 
 ### Design Decisions & Trade-offs
 
-| Decision | Why | Trade-off |
-|----------|-----|---------|
-| Socket.io + Redis Adapter | Enables true horizontal scaling across multiple Node processes/servers | Extra Redis dependency |
-| Presence in Redis | Fast reads/writes for online status and last-seen | Eventual consistency if Redis is partitioned |
-| Kafka for events | Decouples chat from notification / analytics pipelines | Added operational complexity |
-| Stateless servers | Easy to scale and deploy | All shared state lives in Redis / DB |
-| Room-based model | Simple and efficient for group chats | Large rooms need careful monitoring |
+| Decision                  | Why                                                                    | Trade-off                                    |
+| ------------------------- | ---------------------------------------------------------------------- | -------------------------------------------- |
+| Socket.io + Redis Adapter | Enables true horizontal scaling across multiple Node processes/servers | Extra Redis dependency                       |
+| Presence in Redis         | Fast reads/writes for online status and last-seen                      | Eventual consistency if Redis is partitioned |
+| Kafka for events          | Decouples chat from notification / analytics pipelines                 | Added operational complexity                 |
+| Stateless servers         | Easy to scale and deploy                                               | All shared state lives in Redis / DB         |
+| Room-based model          | Simple and efficient for group chats                                   | Large rooms need careful monitoring          |
 
 ## Tech Stack
 
@@ -80,7 +81,6 @@ Clients (Web / Mobile)
 ```bash
 git clone https://github.com/olabodeIdowu/realtime-chat-notification-service.git
 cd realtime-chat-notification-service
-cp .env.example .env
 docker-compose up --build
 
 Service will be available at: http://localhost:5000Test with a simple clientYou can use any Socket.io client or the browser console:js
@@ -130,4 +130,4 @@ Implement message delivery receipts and read status
 Add rate limiting per socket / user
 Move to a dedicated message store (e.g. Cassandra or MongoDB for very high write volume)
 Full OpenTelemetry instrumentation
-
+```
