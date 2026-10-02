@@ -1,0 +1,38 @@
+version: "3.9"
+
+services:
+  mysql:
+    image: mysql:8.0
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: transactions_db
+    ports:
+      - "3307:3306"
+    volumes:
+      - tx_mysql_data:/var/lib/mysql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6380:6379"
+
+  api:
+    build: .
+    ports:
+      - "4100:4100"
+    environment:
+      - NODE_ENV=development
+      - PORT=4100
+      - MYSQL_HOST=mysql
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=root
+      - MYSQL_DATABASE=transactions_db
+      - REDIS_URL=redis://redis:6379
+    depends_on:
+      - mysql
+      - redis
+
+volumes:
+  tx_mysql_data:
